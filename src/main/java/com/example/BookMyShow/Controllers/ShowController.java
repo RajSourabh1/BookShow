@@ -7,6 +7,8 @@ import com.example.BookMyShow.Service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
@@ -25,9 +27,9 @@ public class ShowController {
 
     @GetMapping("/getAllShows")
     public List<ShowResponseDTO> getShow(@RequestParam("id") int movieId,
-                                         @RequestParam("showDate") Date date,
+                                         @RequestParam("showDate") LocalDate date,
                                          @RequestParam("fromTime")LocalTime fromTime,
-                                         @RequestParam("toTime")LocalTime toTime){
+                                         @RequestParam("toTime")LocalTime toTime) throws ParseException {
         return showService.getShows(movieId,date,fromTime,toTime);
     }
 }

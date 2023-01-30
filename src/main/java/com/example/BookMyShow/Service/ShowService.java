@@ -10,10 +10,14 @@ import com.example.BookMyShow.RequestResponseDTO.ShowResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ShowService {
@@ -65,16 +69,18 @@ public class ShowService {
         return seats;
     }
 
-    public List<ShowResponseDTO> getShows(int movieId, Date date, LocalTime fromTime,LocalTime toTime){
+    public List<ShowResponseDTO> getShows(int movieId, LocalDate date, LocalTime fromTime, LocalTime toTime) throws ParseException {
         List<ShowResponseDTO> showList = new ArrayList<>();
         Movie movie = movieRepository.findById(movieId).get();
         List<Show> shows = movie.getShows();
         for(Show show:shows){
 
+           // Date date1 = new SimpleDateFormat("yyyy-mm-dd").parse(String.valueOf(date));
+
             int value1 = fromTime.compareTo(show.getShowTime());
             int value2 = toTime.compareTo(show.getShowTime());
 
-            if(show.getShowDate().equals(date) && value1>0 && value2>0){
+            if(show.getShowDate().compareTo(date)==0 && value1<=0 && value2>=0){
                 ShowResponseDTO showResponseDTO = ShowResponseDTO.builder()
                                                                            .movieName(show.getMovie().getMovieName())
                                                                            .theaterName(show.getTheater().getName())

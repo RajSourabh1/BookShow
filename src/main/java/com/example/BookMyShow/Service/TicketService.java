@@ -23,14 +23,12 @@ public class TicketService {
 
     @Autowired
     ShowRepository showRepository;
+    @Autowired
     UserRepository userRepository;
+    @Autowired
     TicketRepository ticketRepository;
     public String createTicket(BookTicketDTO bookTicketDTO) throws Exception{
         List<String> requestedSeats = bookTicketDTO.getRequestedSeats();
-
-        for(String str : requestedSeats){
-            System.out.println(str);
-        }
 
         Show show = showRepository.findById(bookTicketDTO.getShowId()).get();
         User user = userRepository.findById(bookTicketDTO.getUserId()).get();
@@ -40,7 +38,6 @@ public class TicketService {
         List<ShowSeats> bookedSeats = new ArrayList<>();
         for(ShowSeats showSeat:showSeats){
             String seatNo = showSeat.getSeatNo();
-            System.out.println(seatNo+" ");
             if(showSeat.isBooked()==false && requestedSeats.contains(seatNo)){
                 bookedSeats.add(showSeat);
             }
@@ -104,7 +101,7 @@ public class TicketService {
             bookedSeat.setBooked(false);
             bookedSeat.setBookedAt(null);
             bookedSeat.setTicket(null);
-            bookedSeat.setShow(null);
+            bookedSeat.setShow(ticket.getShow());
         }
 
         ticket.setBookedAt(null);
@@ -122,7 +119,7 @@ public class TicketService {
     public List<UserTicketResponse> findTickets(int userId){
         User user = userRepository.findById(userId).get();
         List<Ticket> tickets = user.getTickets();
-        List<UserTicketResponse> result = null;
+        List<UserTicketResponse> result = new ArrayList<>();
 
         for(Ticket ticket:tickets){
             UserTicketResponse userTicketResponse = UserTicketResponse.builder()

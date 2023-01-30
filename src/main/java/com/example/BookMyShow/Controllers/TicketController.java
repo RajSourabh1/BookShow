@@ -32,7 +32,7 @@ public class TicketController {
     }
 
     @GetMapping("/getTickets")
-    public List<UserTicketResponse> getTicket(@RequestParam("id")int userId){
-        return ticketService.findTickets(userId);
+    public List<UserTicketResponse> getTicket(@RequestParam("id")int id){
+        return ticketService.findTickets(id);
     }
 }
